@@ -64,4 +64,4 @@ for i in range(1,iterations):
             policy[s] = exps / np.sum(exps)
             
 #policy extraction
-bestAction = [np.argwhere(policy[i] == np.max(policy[i])) for i in range(len(policy))]
+bestActions = [np.argwhere(policy[i] == np.max(policy[i])) for i in range(len(policy))]
