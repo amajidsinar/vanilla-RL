@@ -47,7 +47,7 @@ up = np.vstack((a[0],a[:3]))
 right = np.column_stack((a[:,1:],a[:,3:]))
 down = np.vstack((a[1:],a[3:]))
 left = np.column_stack((a[:,:1],a[:,:3]))
-nextPossibleStates = np.stack((up,right,down,left)).reshape(4,1,16)
+nextPossibleStates = np.stack((left,down,right,up)).reshape(4,1,16)
 
 
 for i in range(1,iterations):
