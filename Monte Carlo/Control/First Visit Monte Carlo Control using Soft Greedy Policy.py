@@ -25,7 +25,7 @@ env = gym.make('FrozenLake-v0')
 
 
 
-episodes = 100000
+episodes = 100
 timesteps = 500
 discount = 1.0
 return_sum = defaultdict(float)
@@ -68,15 +68,16 @@ for e in range(episodes):
     state = env.reset()
     for t in range(timesteps):
         action = soft_policy()
-        state,reward,done,_ = env.step(action)
+        next_state,reward,done,_ = env.step(action)
         if done:
             if state == 15:
-                episode.append((state,action,diamond,done))
+                episode.append((state,action,next_state,diamond,done))
             else:
-                episode.append((state,action,pit,done))
+                episode.append((state,action,next_state,pit,done))
             print('Episode {} ends after {} timesteps.'.format(e,t+1))
             break
-        episode.append((state,action,cost,done))
+        episode.append((state,action,next_state,cost,done))
+        state = next_state
         
     #look for unique sa pair
     unique_sa = set([(value[0],value[1]) for i,value in enumerate(episode)])
@@ -85,7 +86,7 @@ for e in range(episodes):
         #find the first index of s,a
         first_occurence = [i for i,val in enumerate(episode) if (val[0],val[1]) == (s,a)][0]
         #sum the reward from the first occurence
-        G = sum([val[2] for i,val in enumerate(episode[first_occurence:])])
+        G = sum([val[3] for val in episode[first_occurence:]])
         Q[s][a] = Q[s][a] + (alpha * (G - Q[s][a]))
         
 #q = [np.max(Q[i])== Q[i] for i in range(len(Q))]

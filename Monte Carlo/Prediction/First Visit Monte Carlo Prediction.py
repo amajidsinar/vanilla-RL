@@ -35,7 +35,7 @@ for e in range(n_episode):
         action = env.action_space.sample()
         nextState, reward, done, _ = env.step(action)
         if done:
-            if state == 15:
+            if nextState == 15:
                 episode.append((state, nextState, diamond, done))
             else:
                 episode.append((state, nextState, pit, done))
@@ -51,7 +51,6 @@ for e in range(n_episode):
         first_occurence = [i for i,value in enumerate (episode) if value[0] == s][0]
         G = sum([(value[2]*discount**i) for i,value in enumerate(episode[first_occurence:])])
         V[s] = V[s] + (alpha*(G - V[s]))
-
         
 running_time = time.time() - start_time
 print("--- %s seconds ---" % (time.time() - start_time))

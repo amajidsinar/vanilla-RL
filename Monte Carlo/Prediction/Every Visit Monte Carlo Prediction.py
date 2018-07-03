@@ -15,7 +15,7 @@ from collections import defaultdict
 env = gym.make('FrozenLake-v0')
 
 
-episodes = 100000
+episodes = 100
 timesteps = 500
 discount = 1.0
 return_sum = defaultdict(float)
@@ -33,23 +33,19 @@ for e in range(episodes):
     state = env.reset()
     episode = []
     for t in range(timesteps):
-        nextState,reward,done,_ = env.step(env.action_space.sample()) 
+        next_state,reward,done,_ = env.step(env.action_space.sample()) 
         if done:
-            if nextState == 15:
-                episode.append((state,nextState,diamond,done))
+            if next_state == 15:
+                episode.append((state,next_state,diamond,done))
             else:
-                episode.append((state,nextState,pit,done))
+                episode.append((state,next_state,pit,done))
             print('episode {} done after {} timesteps'.format(e, t+1))
             break;
-        episode.append((state,nextState,cost,done))
-        state = nextState
-    states = set(value[0] for i,value in enumerate(episode))
-    for s in states:
-        occurence = [i for i,value in enumerate(episode) if value[0]==s]
-        for o in occurence:
-            G = sum([value[2]*discount**i for i,value in enumerate(episode[o:])])
-            V[s] = V[s] + (alpha*(G-V[s]))
-    
+        episode.append((state,next_state,cost,done))
+        state = next_state
+    for i,val in enumerate(episode):
+        G = sum([j[2]*discount**i for j in episode[i:]])
+        V[val[0]] += alpha * (G - V[val[0]])
             
                 
                 
